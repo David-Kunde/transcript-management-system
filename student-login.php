@@ -8,67 +8,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    // Validate inputs
-    if (empty($email) || empty($password)) {
-        $error = "Please fill in all fields.";
+    // Database connection
+    $conn = new mysqli('localhost', 'root', '', 'transcript_management');
+
+    // Check connection
+    if ($conn->connect_error) {
+        $error = "Connection failed: " . $conn->connect_error;
     } else {
-        // Database connection
-        $conn = new mysqli('localhost', 'root', '', 'transcript_management');
+        // Check if student is registered
+        $sql = "SELECT Student_ID, Email, password FROM students WHERE Email = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-        // Check connection
-        if ($conn->connect_error) {
-            $error = "Connection failed: " . $conn->connect_error;
-        } else {
-            // Prepare SQL query to fetch admin details
-            $sql = "SELECT Admin_ID, Email, Password, first_name, last_name, Role, Permissions, Department, Is_Active FROM administrators WHERE Email = ?";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("s", $email);
-            $stmt->execute();
-            $result = $stmt->get_result();
+        if ($result->num_rows > 0) {
+            $student = $result->fetch_assoc();
+            // Verify password
+            if ($password == $student['password']) {
+                // Set session variables
+                $_SESSION['student_email'] = $student['Email'];
+                $_SESSION['Student_ID'] = $student['Student_ID'];
 
-            // Check if admin exists
-            if ($result->num_rows > 0) {
-                $admin = $result->fetch_assoc();
-
-                // Verify password (plain text comparison)
-                if ($password === $admin['Password']) {
-                    // Check if the admin account is active
-                    if ($admin['Is_Active'] == 1) {
-                        // Regenerate session ID for security
-                        session_regenerate_id(true);
-
-                        // Set session variables
-                        $_SESSION['admin_id'] = $admin['Admin_ID'];
-                        $_SESSION['admin_email'] = $admin['Email'];
-                        $_SESSION['admin_name'] = $admin['first_name'] . ' ' . $admin['last_name'];
-                        $_SESSION['admin_role'] = $admin['Role'];
-                        $_SESSION['admin_permissions'] = $admin['Permissions'];
-                        $_SESSION['admin_department'] = $admin['Department'];
-
-                        // Update last login timestamp
-                        $updateSql = "UPDATE administrators SET Last_Login = NOW() WHERE Admin_ID = ?";
-                        $updateStmt = $conn->prepare($updateSql);
-                        $updateStmt->bind_param("i", $admin['Admin_ID']);
-                        $updateStmt->execute();
-                        $updateStmt->close();
-
-                        // Redirect to admin dashboard
-                        header("Location: admin-dashboard.php");
-                        exit();
-                    } else {
-                        $error = "Your account is inactive. Please contact the system administrator.";
-                    }
-                } else {
-                    $error = "Incorrect password.";
-                }
+                header("Location: student-dashboard.php");
+                exit();
             } else {
-                $error = "Admin not Registered";
+                $error = "Incorrect password";
             }
-
-            // Close statement and connection
-            $stmt->close();
-            $conn->close();
+        } else {
+            $error = "Student not registered on the transcript system";
         }
+
+        $stmt->close();
+        $conn->close();
     }
 }
 ?>
@@ -78,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login</title>
+    <title>Login</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <style>
@@ -102,6 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         height: 100%;
         background: url('https://www.collegemagazine.com/wp-content/uploads/2022/02/alfons-morales-YLSwjSy7stw-unsplash-1024x601.jpg') no-repeat center center/cover;
         filter: brightness(0.2);
+        /* Darken the background image */
         z-index: -1;
     }
 
@@ -117,6 +90,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     .card {
         background: rgba(255, 255, 255, 0.1);
+        /* Slightly transparent white background */
         border: none;
         border-radius: 10px;
     }
@@ -152,6 +126,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     .form-control::placeholder {
         color: rgba(255, 255, 255, 0.7);
+        /* Light placeholder text */
     }
 
     .form-control:focus {
@@ -170,6 +145,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         color: #ff6b6b;
     }
 
+    /* Responsive adjustments */
     @media (max-width: 768px) {
         .navbar-brand {
             font-size: 1.2rem;
@@ -208,10 +184,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul class="navbar-nav ms-auto mx-4">
-                        <li class="nav-item">
-                            <a class="nav-link" href="login.php">Student Login</a>
-                        </li>
-                        <li class="nav-item">
+                        <li class="nav-item d-none">
                             <a class="nav-link" href="signup.php">Sign up</a>
                         </li>
                     </ul>
@@ -223,14 +196,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="container">
         <div class="row">
             <div class="col-md-6 offset-md-3">
-                <h2 class="text-center text-light mt-5">Admin Login</h2>
+                <h2 class="text-center text-light mt-5">Student Login</h2>
                 <div class="card my-3">
                     <form class="card-body cardbody-color p-lg-5" method="POST">
-                        <div class="text-center">
-                            <a href="index.php">
+                        <div class="text-center"><a href="index.php">
                                 <img src="assets/images/bsuLogo.jpg"
-                                    class="img-fluid profile-image-pic img-thumbnail rounded-circle my-3" alt="profile">
-                            </a>
+                                    class="img-fluid profile-image-pic img-thumbnail rounded-circle my-3"
+                                    alt="profile"></a>
                         </div>
 
                         <?php if ($error): ?>
@@ -241,26 +213,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                         <div class="mb-3">
                             <input type="email" class="form-control" id="email" name="email"
-                                placeholder="Enter your email address" required aria-label="Email">
+                                placeholder="Enter your email address" required>
                         </div>
                         <div class="mb-3">
                             <input type="password" class="form-control" id="password" name="password"
-                                placeholder="Password" required aria-label="Password">
+                                placeholder="Password" required>
                         </div>
                         <div class="text-center">
                             <button type="submit" class="btn btn-color px-5 mb-3 w-100">Login</button>
                         </div>
-
-
                         <div class="text-center mb-3">
                             <p class="text-light fw-bold">Forgot Password? <a href="forgot-password.php "
                                     class="text-light fw-bold ps-1">Reset here</a>
                             </p>
 
                         </div>
-
-
-                        
+                        <div id="emailHelp" class="form-text text-center mb-5 text-light d-none">
+                            Not Registered? <a href="signup.php" class="text-light fw-bold">Register here</a>
+                        </div>
                     </form>
                 </div>
             </div>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 01, 2025 at 05:47 AM
+-- Generation Time: Mar 01, 2025 at 01:36 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -162,8 +162,10 @@ INSERT INTO `courses` (`courseID`, `courseCode`, `courseTitle`, `creditUnits`, `
 --
 
 CREATE TABLE `grade` (
+  `sn` int(11) NOT NULL,
+  `grade_id` varchar(50) NOT NULL,
   `Student_ID` varchar(20) NOT NULL,
-  `Course_ID` varchar(20) NOT NULL,
+  `course_code` varchar(20) NOT NULL,
   `Score` float NOT NULL,
   `Grade` varchar(5) DEFAULT NULL,
   `GPA_Points` float DEFAULT NULL,
@@ -171,6 +173,151 @@ CREATE TABLE `grade` (
   `Year` int(11) NOT NULL,
   `Date_Recorded` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `grade`
+--
+
+INSERT INTO `grade` (`sn`, `grade_id`, `Student_ID`, `course_code`, `Score`, `Grade`, `GPA_Points`, `Semester`, `Year`, `Date_Recorded`) VALUES
+(1, 'BSU/SC/CMP/19/54286_CMP101_2022', 'BSU/SC/CMP/19/54286', 'CMP101', 85, 'A', 5, 'First', 2022, '2022-06-10'),
+(2, 'BSU/SC/CMP/19/54286_CMP203_2022', 'BSU/SC/CMP/19/54286', 'CMP203', 91, 'A', 5, 'First', 2022, '2022-11-18'),
+(3, 'BSU/SC/CMP/19/54286_CMP264_2022', 'BSU/SC/CMP/19/54286', 'CMP264', 93, 'A', 5, 'Second', 2022, '2022-06-10'),
+(4, 'BSU/SC/CMP/19/54286_CMP301_2023', 'BSU/SC/CMP/19/54286', 'CMP301', 79, 'A', 5, 'First', 2023, '2023-06-12'),
+(5, 'BSU/SC/CMP/19/54286_CMP310_2023', 'BSU/SC/CMP/19/54286', 'CMP310', 88, 'A', 5, 'Second', 2023, '2023-06-12'),
+(6, 'BSU/SC/CMP/19/54286_CMP315_2024', 'BSU/SC/CMP/19/54286', 'CMP315', 85, 'A', 5, 'First', 2024, '2024-06-14'),
+(7, 'BSU/SC/CMP/19/54286_CMP318_2024', 'BSU/SC/CMP/19/54286', 'CMP318', 92, 'A', 5, 'Second', 2024, '2024-11-24'),
+(8, 'BSU/SC/CMP/19/54286_CMP405_2023', 'BSU/SC/CMP/19/54286', 'CMP405', 55, 'C', 3, 'First', 2023, '2023-06-12'),
+(9, 'BSU/SC/CMP/19/54286_CMP411_2023', 'BSU/SC/CMP/19/54286', 'CMP411', 73, 'A', 5, 'First', 2023, '2023-11-22'),
+(10, 'BSU/SC/CMP/19/54286_CMP417_2024', 'BSU/SC/CMP/19/54286', 'CMP417', 83, 'A', 5, 'First', 2024, '2024-06-14'),
+(11, 'BSU/SC/CMP/19/54286_CMP430_2024', 'BSU/SC/CMP/19/54286', 'CMP430', 94, 'A', 5, 'Second', 2024, '2024-11-24'),
+(12, 'BSU/SC/CMP/19/54286_CMP450_2024', 'BSU/SC/CMP/19/54286', 'CMP450', 89, 'A', 5, 'Second', 2024, '2024-06-14'),
+(13, 'BSU/SC/CMP/19/54286_CMP452_2024', 'BSU/SC/CMP/19/54286', 'CMP452', 79, 'A', 5, 'Second', 2024, '2024-11-24'),
+(14, 'BSU/SC/CMP/19/54286_CMP454_2025', 'BSU/SC/CMP/19/54286', 'CMP454', 95, 'A', 5, 'Second', 2025, '2025-06-12'),
+(15, 'BSU/SC/CMP/19/54286_CMP460_2025', 'BSU/SC/CMP/19/54286', 'CMP460', 87, 'A', 5, 'Second', 2025, '2025-06-12'),
+(16, 'BSU/SC/CMP/19/54286_CMP470_2025', 'BSU/SC/CMP/19/54286', 'CMP470', 66, 'B', 4, 'Second', 2025, '2025-11-19'),
+(17, 'BSU/SC/CMP/19/54286_CMP499_2025', 'BSU/SC/CMP/19/54286', 'CMP499', 92, 'A', 5, 'First', 2025, '2025-11-19'),
+(18, 'BSU/SC/CMP/19/54286_GST111_2022', 'BSU/SC/CMP/19/54286', 'GST111', 69, 'B', 4, 'First', 2022, '2022-06-10'),
+(19, 'BSU/SC/CMP/19/54286_GST113_2021', 'BSU/SC/CMP/19/54286', 'GST113', 88, 'A', 5, 'First', 2021, '2021-06-15'),
+(20, 'BSU/SC/CMP/19/54286_GST122_2021', 'BSU/SC/CMP/19/54286', 'GST122', 76, 'A', 5, 'Second', 2021, '2021-11-20'),
+(21, 'BSU/SC/CMP/19/54286_GST222_2023', 'BSU/SC/CMP/19/54286', 'GST222', 72, 'A', 5, 'Second', 2023, '2023-11-22'),
+(22, 'BSU/SC/CMP/19/54286_MTH201_2022', 'BSU/SC/CMP/19/54286', 'MTH201', 41, 'E', 1, 'First', 2022, '2022-11-18'),
+(23, 'BSU/SC/CMP/19/54286_MTH202_2022', 'BSU/SC/CMP/19/54286', 'MTH202', 58, 'C', 3, 'Second', 2022, '2022-11-18'),
+(24, 'BSU/SC/CMP/19/54286_MTH206_2023', 'BSU/SC/CMP/19/54286', 'MTH206', 67, 'B', 4, 'Second', 2023, '2023-06-12'),
+(25, 'BSU/SC/CMP/19/54286_MTH208_2021', 'BSU/SC/CMP/19/54286', 'MTH208', 84, 'A', 5, 'Second', 2021, '2021-11-20'),
+(26, 'BSU/SC/CMP/19/54286_MTH405_2024', 'BSU/SC/CMP/19/54286', 'MTH405', 90, 'A', 5, 'First', 2024, '2024-06-14'),
+(27, 'BSU/SC/CMP/19/54286_STA111_2022', 'BSU/SC/CMP/19/54286', 'STA111', 97, 'A', 5, 'First', 2022, '2022-06-10'),
+(28, 'BSU/SC/CMP/19/54286_STA112_2022', 'BSU/SC/CMP/19/54286', 'STA112', 74, 'A', 5, 'Second', 2022, '2022-06-10'),
+(29, 'BSU/SC/CMP/19/54286_STA124_2021', 'BSU/SC/CMP/19/54286', 'STA124', 63, 'B', 4, 'Second', 2021, '2021-06-15'),
+(30, 'BSU/SC/CMP/19/54286_STA201_2021', 'BSU/SC/CMP/19/54286', 'STA201', 70, 'A', 5, 'First', 2021, '2021-06-15'),
+(31, 'BSU/SC/CMP/19/54286_STA208_2024', 'BSU/SC/CMP/19/54286', 'STA208', 77, 'A', 5, 'Second', 2024, '2024-11-24'),
+(32, 'BSU/SC/CMP/19/54286_STA306_2024', 'BSU/SC/CMP/19/54286', 'STA306', 62, 'B', 4, 'Second', 2024, '2024-06-14'),
+(33, 'BSU/SC/CMP/19/54286_STA312_2022', 'BSU/SC/CMP/19/54286', 'STA312', 65, 'B', 4, 'Second', 2022, '2022-11-18'),
+(34, 'BSU/SC/CMP/19/54286_STA321_2022', 'BSU/SC/CMP/19/54286', 'STA321', 72, 'A', 5, 'First', 2022, '2022-06-10'),
+(35, 'BSU/SC/CMP/19/54286_STA401_2023', 'BSU/SC/CMP/19/54286', 'STA401', 81, 'A', 5, 'First', 2023, '2023-11-22'),
+(36, 'BSU/SC/CMP/19/54286_STA412_2024', 'BSU/SC/CMP/19/54286', 'STA412', 68, 'B', 4, 'Second', 2024, '2024-11-24'),
+(37, 'BSU/SC/CMP/19/54286_STA413_2024', 'BSU/SC/CMP/19/54286', 'STA413', 80, 'A', 5, 'First', 2024, '2024-11-24'),
+(38, 'BSU/SC/CMP/19/54286_STA414_2023', 'BSU/SC/CMP/19/54286', 'STA414', 66, 'B', 4, 'Second', 2023, '2023-11-22'),
+(39, 'BSU/SC/CMP/19/54286_STA415_2024', 'BSU/SC/CMP/19/54286', 'STA415', 60, 'B', 4, 'First', 2024, '2024-06-14'),
+(40, 'BSU/SC/CMP/19/54286_STA416_2024', 'BSU/SC/CMP/19/54286', 'STA416', 79, 'A', 5, 'Second', 2024, '2024-06-14'),
+(41, 'BSU/SC/CMP/19/54286_STA426_2021', 'BSU/SC/CMP/19/54286', 'STA426', 75, 'A', 5, 'Second', 2021, '2021-11-20'),
+(42, 'BSU/SC/CMP/19/54286_STA430_2025', 'BSU/SC/CMP/19/54286', 'STA430', 82, 'A', 5, 'Second', 2025, '2025-06-12'),
+(43, 'BSU/SC/CMP/19/54286_STA431_2024', 'BSU/SC/CMP/19/54286', 'STA431', 56, 'C', 3, 'First', 2024, '2024-11-24'),
+(44, 'BSU/SC/CMP/19/54286_STA432_2025', 'BSU/SC/CMP/19/54286', 'STA432', 78, 'A', 5, 'Second', 2025, '2025-11-19'),
+(109, 'BSU/SC/MTH/19/54288_GST 111_2021', 'BSU/SC/MTH/19/54288', 'GST 111', 62, 'B', 4, 'First', 2021, '2021-09-30'),
+(110, 'BSU/SC/MTH/19/54288_GST 113_2021', 'BSU/SC/MTH/19/54288', 'GST 113', 58, 'C', 3, 'First', 2021, '2021-09-30'),
+(111, 'BSU/SC/MTH/19/54288_GST 121_2021', 'BSU/SC/MTH/19/54288', 'GST 121', 55, 'C', 3, 'First', 2021, '2021-09-30'),
+(112, 'BSU/SC/MTH/19/54288_GST 122_2021', 'BSU/SC/MTH/19/54288', 'GST 122', 57, 'C', 3, 'Second', 2021, '2021-09-30'),
+(103, 'BSU/SC/MTH/19/54288_MTH 101_2021', 'BSU/SC/MTH/19/54288', 'MTH 101', 58, 'C', 3, 'First', 2021, '2021-09-30'),
+(104, 'BSU/SC/MTH/19/54288_MTH 102_2021', 'BSU/SC/MTH/19/54288', 'MTH 102', 62, 'B', 4, 'Second', 2021, '2021-09-30'),
+(105, 'BSU/SC/MTH/19/54288_MTH 104_2021', 'BSU/SC/MTH/19/54288', 'MTH 104', 55, 'C', 3, 'Second', 2021, '2021-09-30'),
+(113, 'BSU/SC/MTH/19/54288_MTH 201_2022', 'BSU/SC/MTH/19/54288', 'MTH 201', 60, 'B', 4, 'First', 2022, '2022-09-30'),
+(114, 'BSU/SC/MTH/19/54288_MTH 202_2022', 'BSU/SC/MTH/19/54288', 'MTH 202', 53, 'C', 3, 'Second', 2022, '2022-09-30'),
+(115, 'BSU/SC/MTH/19/54288_MTH 203_2022', 'BSU/SC/MTH/19/54288', 'MTH 203', 57, 'C', 3, 'First', 2022, '2022-09-30'),
+(116, 'BSU/SC/MTH/19/54288_MTH 205_2022', 'BSU/SC/MTH/19/54288', 'MTH 205', 63, 'B', 4, 'First', 2022, '2022-09-30'),
+(117, 'BSU/SC/MTH/19/54288_MTH 207_2022', 'BSU/SC/MTH/19/54288', 'MTH 207', 52, 'C', 3, 'First', 2022, '2022-09-30'),
+(118, 'BSU/SC/MTH/19/54288_MTH 208_2022', 'BSU/SC/MTH/19/54288', 'MTH 208', 59, 'C', 3, 'Second', 2022, '2022-09-30'),
+(123, 'BSU/SC/MTH/19/54288_MTH 313_2023', 'BSU/SC/MTH/19/54288', 'MTH 313', 61, 'B', 4, 'First', 2023, '2023-09-30'),
+(124, 'BSU/SC/MTH/19/54288_MTH 315_2023', 'BSU/SC/MTH/19/54288', 'MTH 315', 55, 'C', 3, 'First', 2023, '2023-09-30'),
+(125, 'BSU/SC/MTH/19/54288_MTH 323_2023', 'BSU/SC/MTH/19/54288', 'MTH 323', 60, 'B', 4, 'First', 2023, '2023-09-30'),
+(126, 'BSU/SC/MTH/19/54288_MTH 324_2023', 'BSU/SC/MTH/19/54288', 'MTH 324', 58, 'C', 3, 'Second', 2023, '2023-09-30'),
+(133, 'BSU/SC/MTH/19/54288_MTH 404_2024', 'BSU/SC/MTH/19/54288', 'MTH 404', 57, 'C', 3, 'Second', 2024, '2024-09-30'),
+(134, 'BSU/SC/MTH/19/54288_MTH 406_2024', 'BSU/SC/MTH/19/54288', 'MTH 406', 56, 'C', 3, 'Second', 2024, '2024-09-30'),
+(135, 'BSU/SC/MTH/19/54288_MTH 408_2024', 'BSU/SC/MTH/19/54288', 'MTH 408', 62, 'B', 4, 'Second', 2024, '2024-09-30'),
+(136, 'BSU/SC/MTH/19/54288_MTH 410_2024', 'BSU/SC/MTH/19/54288', 'MTH 410', 61, 'B', 4, 'Second', 2024, '2024-09-30'),
+(137, 'BSU/SC/MTH/19/54288_MTH 412_2024', 'BSU/SC/MTH/19/54288', 'MTH 412', 54, 'C', 3, 'Second', 2024, '2024-09-30'),
+(138, 'BSU/SC/MTH/19/54288_MTH 416_2024', 'BSU/SC/MTH/19/54288', 'MTH 416', 58, 'C', 3, 'Second', 2024, '2024-09-30'),
+(139, 'BSU/SC/MTH/19/54288_MTH 418_2024', 'BSU/SC/MTH/19/54288', 'MTH 418', 63, 'B', 4, 'Second', 2024, '2024-09-30'),
+(140, 'BSU/SC/MTH/19/54288_MTH 424_2024', 'BSU/SC/MTH/19/54288', 'MTH 424', 60, 'B', 4, 'Second', 2024, '2024-09-30'),
+(106, 'BSU/SC/MTH/19/54288_STA 111_2021', 'BSU/SC/MTH/19/54288', 'STA 111', 59, 'C', 3, 'First', 2021, '2021-09-30'),
+(107, 'BSU/SC/MTH/19/54288_STA 112_2021', 'BSU/SC/MTH/19/54288', 'STA 112', 55, 'C', 3, 'Second', 2021, '2021-09-30'),
+(108, 'BSU/SC/MTH/19/54288_STA 114_2021', 'BSU/SC/MTH/19/54288', 'STA 114', 61, 'B', 4, 'Second', 2021, '2021-09-30'),
+(119, 'BSU/SC/MTH/19/54288_STA 124_2022', 'BSU/SC/MTH/19/54288', 'STA 124', 52, 'C', 3, 'Second', 2022, '2022-09-30'),
+(120, 'BSU/SC/MTH/19/54288_STA 201_2022', 'BSU/SC/MTH/19/54288', 'STA 201', 57, 'C', 3, 'First', 2022, '2022-09-30'),
+(121, 'BSU/SC/MTH/19/54288_STA 211_2022', 'BSU/SC/MTH/19/54288', 'STA 211', 58, 'C', 3, 'First', 2022, '2022-09-30'),
+(122, 'BSU/SC/MTH/19/54288_STA 212_2022', 'BSU/SC/MTH/19/54288', 'STA 212', 60, 'B', 4, 'Second', 2022, '2022-09-30'),
+(127, 'BSU/SC/MTH/19/54288_STA 214_2023', 'BSU/SC/MTH/19/54288', 'STA 214', 59, 'C', 3, 'Second', 2023, '2023-09-30'),
+(128, 'BSU/SC/MTH/19/54288_STA 222_2023', 'BSU/SC/MTH/19/54288', 'STA 222', 62, 'B', 4, 'Second', 2023, '2023-09-30'),
+(129, 'BSU/SC/MTH/19/54288_STA 311_2023', 'BSU/SC/MTH/19/54288', 'STA 311', 55, 'C', 3, 'First', 2023, '2023-09-30'),
+(130, 'BSU/SC/MTH/19/54288_STA 312_2023', 'BSU/SC/MTH/19/54288', 'STA 312', 56, 'C', 3, 'Second', 2023, '2023-09-30'),
+(131, 'BSU/SC/MTH/19/54288_STA 314_2023', 'BSU/SC/MTH/19/54288', 'STA 314', 61, 'B', 4, 'Second', 2023, '2023-09-30'),
+(132, 'BSU/SC/MTH/19/54288_STA 318_2023', 'BSU/SC/MTH/19/54288', 'STA 318', 53, 'C', 3, 'Second', 2023, '2023-09-30'),
+(141, 'BSU/SC/MTH/19/54288_STA 417_2024', 'BSU/SC/MTH/19/54288', 'STA 417', 61, 'B', 4, 'First', 2024, '2024-09-30'),
+(142, 'BSU/SC/MTH/19/54288_STA 419_2024', 'BSU/SC/MTH/19/54288', 'STA 419', 60, 'B', 4, 'First', 2024, '2024-09-30'),
+(143, 'BSU/SC/MTH/19/54288_STA 421_2024', 'BSU/SC/MTH/19/54288', 'STA 421', 52, 'C', 3, 'First', 2024, '2024-09-30'),
+(144, 'BSU/SC/MTH/19/54288_STA 422_2024', 'BSU/SC/MTH/19/54288', 'STA 422', 59, 'C', 3, 'Second', 2024, '2024-09-30'),
+(145, 'BSU/SC/MTH/19/54288_STA 424_2024', 'BSU/SC/MTH/19/54288', 'STA 424', 58, 'C', 3, 'Second', 2024, '2024-09-30'),
+(146, 'BSU/SC/MTH/19/54288_STA 426_2024', 'BSU/SC/MTH/19/54288', 'STA 426', 62, 'B', 4, 'Second', 2024, '2024-09-30'),
+(147, 'BSU/SC/MTH/19/54288_STA 441_2024', 'BSU/SC/MTH/19/54288', 'STA 441', 55, 'C', 3, 'First', 2024, '2024-09-30'),
+(148, 'BSU/SC/MTH/19/54288_STA 443_2024', 'BSU/SC/MTH/19/54288', 'STA 443', 56, 'C', 3, 'First', 2024, '2024-09-30'),
+(149, 'BSU/SC/MTH/19/54288_STA 445_2024', 'BSU/SC/MTH/19/54288', 'STA 445', 61, 'B', 4, 'First', 2024, '2024-09-30'),
+(150, 'BSU/SC/MTH/19/54288_STA 451_2024', 'BSU/SC/MTH/19/54288', 'STA 451', 57, 'C', 3, 'First', 2024, '2024-09-30'),
+(151, 'BSU/SC/MTH/19/54288_STA 453_2024', 'BSU/SC/MTH/19/54288', 'STA 453', 58, 'C', 3, 'First', 2024, '2024-09-30'),
+(152, 'BSU/SC/MTH/19/54288_STA 457_2024', 'BSU/SC/MTH/19/54288', 'STA 457', 60, 'B', 4, 'First', 2024, '2024-09-30');
+
+--
+-- Triggers `grade`
+--
+DELIMITER $$
+CREATE TRIGGER `before_insert_grade` BEFORE INSERT ON `grade` FOR EACH ROW BEGIN
+    SET NEW.grade_id = CONCAT(NEW.student_id, '_', NEW.course_code, '_', NEW.year);
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `set_grade_and_gpa` BEFORE INSERT ON `grade` FOR EACH ROW BEGIN
+    -- Determine the grade based on the score
+    IF NEW.Score BETWEEN 70 AND 100 THEN
+        SET NEW.Grade = 'A', NEW.GPA_Points = 5;
+    ELSEIF NEW.Score BETWEEN 60 AND 69 THEN
+        SET NEW.Grade = 'B', NEW.GPA_Points = 4;
+    ELSEIF NEW.Score BETWEEN 50 AND 59 THEN
+        SET NEW.Grade = 'C', NEW.GPA_Points = 3;
+    ELSEIF NEW.Score BETWEEN 45 AND 49 THEN
+        SET NEW.Grade = 'D', NEW.GPA_Points = 2;
+    ELSEIF NEW.Score BETWEEN 40 AND 44 THEN
+        SET NEW.Grade = 'E', NEW.GPA_Points = 1;
+    ELSE
+        SET NEW.Grade = 'F', NEW.GPA_Points = 0;
+    END IF;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `set_semester_based_on_course` BEFORE INSERT ON `grade` FOR EACH ROW BEGIN
+    DECLARE last_digit CHAR(1);
+
+    -- Extract the last character of Course_ID
+    SET last_digit = RIGHT(NEW.course_code, 1);
+
+    -- Check if the last character is odd or even and set the semester accordingly
+    IF last_digit IN ('1', '3', '5', '7', '9') THEN
+        SET NEW.Semester = 'First';
+    ELSEIF last_digit IN ('0', '2', '4', '6', '8') THEN
+        SET NEW.Semester = 'Second';
+    END IF;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -250,8 +397,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`User_ID`, `userType`, `First_Name`, `Middle_Name`, `Last_Name`, `Email`, `Phone_Number`, `Password_Hash`, `Created_At`, `Last_Login`, `Is_Active`) VALUES
-(24, 'student', 'chibuikeo', '', 'okonkwo', 'chibuikeokonkwo21@bsumail.edu.ng', '', '$2y$10$FBtAwa4qWgs2ZFBTmzrhg.n0m0sZy/pe1.DkzcCdfCB6YooXfASAm', '2025-02-28 15:45:00', NULL, 1),
-(25, 'student', 'chinedue', '', 'eze', 'chinedueze12@bsumail.edu.ng', '08165432198', '$2y$10$t.HQtkeOWj.VWyE38M9JYONxV7.q7nsdNzeuOCfysEVY3tFuoGlzy', '2025-02-28 15:47:07', NULL, 1);
+(26, 'student', 'David', '', 'Kunde', 'kundedavid565@gmail.com', '09075037519', '$2y$10$JXWs0VcAvb5Pya8cmKKP8u1Ht9iTSkmZQLsIMTbbDuw2hHKsQ2X3i', '2025-03-01 12:23:59', NULL, 1);
 
 --
 -- Indexes for dumped tables
@@ -273,8 +419,9 @@ ALTER TABLE `courses`
 -- Indexes for table `grade`
 --
 ALTER TABLE `grade`
-  ADD PRIMARY KEY (`Score`),
-  ADD UNIQUE KEY `Course_ID` (`Course_ID`);
+  ADD PRIMARY KEY (`grade_id`),
+  ADD UNIQUE KEY `Course_ID` (`course_code`),
+  ADD KEY `serial_no` (`sn`);
 
 --
 -- Indexes for table `student`
@@ -308,21 +455,20 @@ ALTER TABLE `courses`
   MODIFY `courseID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96;
 
 --
+-- AUTO_INCREMENT for table `grade`
+--
+ALTER TABLE `grade`
+  MODIFY `sn` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=153;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `User_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `User_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- Constraints for dumped tables
 --
-
---
--- Constraints for table `grade`
---
-ALTER TABLE `grade`
-  ADD CONSTRAINT `grade_ibfk_1` FOREIGN KEY (`Student_ID`) REFERENCES `student` (`Student_ID`),
-  ADD CONSTRAINT `grade_ibfk_2` FOREIGN KEY (`Course_ID`) REFERENCES `course` (`Course_ID`);
 
 --
 -- Constraints for table `transcript_request`

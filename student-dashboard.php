@@ -1,3 +1,51 @@
+<?php
+// Start session
+session_start();
+
+// Check if the logout query parameter is set
+if (isset($_GET['logout']) && $_GET['logout'] == 'true') {
+    // Unset all session variables
+    $_SESSION = array();
+
+    // Destroy the session
+    session_destroy();
+
+    // Redirect to the login page or home page
+    header("Location: student-login.php"); // Replace "login.php" with your desired page
+    exit();
+}
+
+// Check if user is logged in
+if (!isset( $_SESSION['student_email'])) {
+    header("Location: student-login.php");
+    exit();
+}
+
+// Database connection
+$conn = new mysqli('localhost', 'root', '', 'transcript_management');
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Fetch student data
+$student_email = $_SESSION['student_email'];
+$sql = "SELECT Student_ID, Email, password, first_name, middle_name, last_name, Department, Program, Admission_year, Phone, Address FROM students WHERE Email = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $student_email);
+$stmt->execute();
+$result = $stmt->get_result();
+$student = $result->fetch_assoc();
+
+if (!$student) {
+    echo "No student data found for Email: " . htmlspecialchars($student_email);
+    exit();
+}
+
+$stmt->close();
+$conn->close();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,7 +62,7 @@
 
 <body>
     <header class="header">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark justify-space-between">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary justify-space-between">
             <a class="navbar-brand px-4" href="index.php">
                 Benue State University, Makurdi
             </a>
@@ -25,7 +73,8 @@
             <div class="collapse navbar-collapse align-items-center" id="navbarNavDropdown">
                 <ul class="navbar-nav ms-auto mx-4">
                     <li class="nav-item">
-                        <a class="nav-link" href="index.php">Logout</a>
+                        <a class="nav-link d-none" href="index.php">Logout</a>
+                        <a class="nav-link" href="?logout=true">Logout</a>
                     </li>
                 </ul>
             </div>
@@ -34,7 +83,7 @@
 
     <!-- Notification Alert -->
     <div id="login-alert" class="alert alert-success text-center" role="alert" style="display: none;">
-        <strong>Logged in successfully!</strong>
+        <p><strong>Welcome</strong> <?php echo htmlspecialchars($student['first_name']); ?></p>
     </div>
 
     <div class="container mt-4">
@@ -45,17 +94,27 @@
         <!-- Profile Section -->
         <section class="mb-4">
             <h2>Personal Information</h2>
-            <div class="card">
+            <div class="card shadow-sm">
                 <div class="card-body">
-                    <p><strong>Name:</strong> John Doe</p>
-                    <p><strong>Matric Number:</strong> S12345678</p>
-                    <p><strong>Department:</strong> Computer Science</p>
-                    <p><strong>Admission Year:</strong> 2020</p>
-                    <p><strong>Program:</strong> B.Sc. Computer Science</p>
-                    <p><strong>Email:</strong> john.doe@example.com</p>
-                    <p><strong>Phone:</strong> +1234567890</p>
-                    <p><strong>Address:</strong> 123 Main St, City, Country</p>
-                    <p><strong>Status:</strong> Active</p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Name:</strong>
+                                <?php echo htmlspecialchars($student['last_name'] ." ". $student['first_name']." ".$student['middle_name']); ?>
+                            </p>
+                            <p><strong>Matric Number:</strong> <?php echo htmlspecialchars($student['Student_ID']); ?>
+                            </p>
+                            <p><strong>Department:</strong> <?php echo htmlspecialchars($student['Department']); ?></p>
+                            <p><strong>Admission Year:</strong>
+                                <?php echo htmlspecialchars($student['Admission_year']); ?></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Program:</strong> <?php echo htmlspecialchars($student['Program']); ?></p>
+                            <p><strong>Email:</strong> <?php echo htmlspecialchars($student['Email']); ?></p>
+                            <p><strong>Phone:</strong> <?php echo htmlspecialchars($student['Phone']); ?></p>
+                            <p><strong>Address:</strong> <?php echo htmlspecialchars($student['Address']); ?></p>
+
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -63,16 +122,30 @@
         <!-- Transcript Section -->
         <section class="mb-4">
             <h2>Transcript</h2>
-            <button class="btn btn-primary" id="download-transcript">
-                <span class="material-icons">download</span>
-                Download Transcript
-            </button>
+            <div class="card shadow-sm">
+                <div class="card-body justify-content-between">
+                    <a href="transcript-request.php"><button class="btn btn-primary" id="request-transcript">
+                            Request Transcript
+                        </button></a>
+
+
+                    <a href="transcript-view.php"><button class="btn btn-primary" id="request-transcript">
+                            View Transcript
+                        </button></a>
+
+
+                    <button class="btn btn-success" id="download-transcript" style="display;">
+                        Download Transcript
+                    </button>
+
+                </div>
+            </div>
         </section>
 
         <!-- QR Code Section -->
         <section>
             <h2>Transcript Verification</h2>
-            <div class="card">
+            <div class="card shadow-sm">
                 <div class="card-body text-center">
                     <h5 class="card-title">Scan to Verify</h5>
                     <canvas id="qr-code"></canvas>
@@ -97,6 +170,19 @@
         setTimeout(() => {
             loginAlert.style.display = 'none';
         }, 6000);
+
+        // Example logic for transcript status
+        const transcriptStatus = document.getElementById('transcript-status').innerText;
+        if (transcriptStatus === 'sent') {
+            document.getElementById('download-transcript').style.display = 'block';
+        }
+
+        // Request transcript button logic
+        document.getElementById('request-transcript').addEventListener('click', function() {
+            // Logic to request transcript
+            alert('Transcript requested successfully!');
+            document.getElementById('transcript-status').innerText = 'requested';
+        });
     });
     </script>
     <style>
@@ -121,6 +207,39 @@
 
     .card {
         margin-bottom: 20px;
+    }
+
+    .card.shadow-sm {
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+
+    .card-body {
+        padding: 1.5rem;
+    }
+
+    .card-title {
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #004085;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+
+    .btn-success:hover {
+        background-color: #218838;
+        border-color: #1e7e34;
     }
     </style>
 </body>
