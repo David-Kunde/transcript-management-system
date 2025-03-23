@@ -56,7 +56,7 @@ foreach ($grades as $grade) {
         $twgp += $grade['credit_units'] * $grade['grade_points'];
     }
 }
-$cgpa = ($tce > 0) ? $twgp / $tce : 0; // Calculate CGPA
+$cgpa = ($tce > 0) ? $twgp / $tcr : 0; // Calculate CGPA
 ?>
 
 <!DOCTYPE html>

@@ -3,6 +3,9 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
+// Start the session
+session_start();
+
 // Database connection
 $servername = "localhost";
 $username = "root";
@@ -107,29 +110,25 @@ $conn->close();
     <title>Admin Dashboard - Transcript Management</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Material Icons -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <!-- Custom CSS -->
     <style>
     body {
         background-color: #f8f9fa;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-family: 'Inter', sans-serif;
     }
 
     .sidebar {
         width: 250px;
         height: 100vh;
-        background: #2e7d32;
+        background: #2c3e50;
         color: white;
         position: fixed;
         top: 0;
         left: 0;
-        transition: all 0.3s ease;
         overflow-y: auto;
-    }
-
-    .sidebar.collapsed {
-        width: 80px;
+        transition: all 0.3s ease;
     }
 
     .sidebar .logo {
@@ -138,12 +137,9 @@ $conn->close();
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
 
-    .sidebar .logo .logo-text {
-        display: inline;
-    }
-
-    .sidebar.collapsed .logo-text {
-        display: none;
+    .sidebar .logo img {
+        width: 40%;
+        max-width: 40px;
     }
 
     .sidebar .nav-link {
@@ -151,6 +147,7 @@ $conn->close();
         padding: 10px 20px;
         display: flex;
         align-items: center;
+        transition: all 0.3s ease;
     }
 
     .sidebar .nav-link:hover {
@@ -161,17 +158,9 @@ $conn->close();
         margin-right: 10px;
     }
 
-    .sidebar.collapsed .nav-link span {
-        display: none;
-    }
-
     .main-content {
         margin-left: 250px;
         transition: all 0.3s ease;
-    }
-
-    .main-content.expanded {
-        margin-left: 80px;
     }
 
     .header {
@@ -183,24 +172,35 @@ $conn->close();
         align-items: center;
     }
 
-    .header .logo {
-        font-size: 24px;
-        font-weight: bold;
-        color: #2e7d32;
-    }
-
     .header .search {
         width: 300px;
         position: relative;
     }
 
-    .header .search .search-icon {
+    .header .search input {
+        padding-right: 40px;
+    }
+
+    .header .search i {
         position: absolute;
         right: 10px;
         top: 50%;
         transform: translateY(-50%);
-        color: #2e7d32;
         cursor: pointer;
+    }
+
+    .header .logout-button {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: all 0.3s ease;
+    }
+
+    .header .logout-button:hover {
+        background-color: #c82333;
     }
 
     .table-responsive {
@@ -215,100 +215,82 @@ $conn->close();
         padding: 5px 10px;
         border-radius: 20px;
         font-size: 14px;
+        font-weight: 500;
     }
 
     .status-badge.pending {
-        background: #ffc107;
-        color: black;
+        background: #fff3cd;
+        color: #856404;
     }
 
     .status-badge.approved {
-        background: #28a745;
-        color: white;
+        background: #d4edda;
+        color: #155724;
     }
 
     .status-badge.rejected {
-        background: #dc3545;
-        color: white;
+        background: #f8d7da;
+        color: #721c24;
     }
 
     .action-buttons .btn {
         margin: 2px;
+        padding: 5px 10px;
+        font-size: 14px;
     }
 
-    .toggle-sidebar {
-        position: fixed;
-        top: 20px;
-        left: 210px;
-        z-index: 1000;
-        cursor: pointer;
-        background: #2e7d32;
-        color: white;
-        border-radius: 50%;
-        padding: 10px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        transition: all 0.3s ease;
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
     }
 
-    .toggle-sidebar.collapsed {
-        left: 40px;
+    .btn-danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
     }
 
-    #searchResults {
-        display: none;
+    .btn-info {
+        background-color: #17a2b8;
+        border-color: #17a2b8;
     }
 
-    .search-message {
-        padding: 20px;
-        text-align: center;
-        background-color: #f8d7da;
-        color: #721c24;
-        border-radius: 8px;
-        margin: 20px;
-    }
-
-    .btn:disabled {
-        cursor: not-allowed;
-        opacity: 0.6;
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
     }
     </style>
 </head>
 
 <body>
-    <!-- Sidebar Toggle Icon -->
-    <div class="toggle-sidebar" id="toggleSidebar">
-        <i class="material-icons">chevron_left</i>
-    </div>
-
     <!-- Sidebar -->
-    <div class="sidebar" id="sidebar">
+    <div class="sidebar">
         <div class="logo">
-            <i class="material-icons d-none">school</i>
-            <span class="logo-text text-start text-bolder">Benue State University</span>
+            <a href="index.php"><img src="assets/images/bsuLogo.jpg" alt="Admin Logo"></a>
+
+            <h5 class="mt-2">BSU Transcript System</h5>
         </div>
         <ul class="nav flex-column">
             <li class="nav-item">
                 <a class="nav-link" href="?status=">
-                    <i class="material-icons">equalizer</i>
+                    <i class="fas fa-tachometer-alt"></i>
                     <span>Overview</span>
                 </a>
             </li>
-
             <li class="nav-item">
                 <a class="nav-link" href="?status=Pending">
-                    <i class="material-icons">pending_actions</i>
+                    <i class="fas fa-clock"></i>
                     <span>Pending Requests</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="?status=Approved">
-                    <i class="material-icons">check_circle</i>
+                    <i class="fas fa-check-circle"></i>
                     <span>Approved Transcripts</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="?status=Rejected">
-                    <i class="material-icons">cancel</i>
+                    <i class="fas fa-times-circle"></i>
                     <span>Rejected Transcripts</span>
                 </a>
             </li>
@@ -316,21 +298,23 @@ $conn->close();
     </div>
 
     <!-- Main Content -->
-    <div class="main-content" id="mainContent">
+    <div class="main-content">
         <!-- Header -->
         <div class="header">
-            <div class="logo">Transcript Management</div>
             <div class="search">
                 <input type="text" class="form-control" id="searchInput" placeholder="Search by Matric Number">
-                <i class="material-icons search-icon" id="searchButton">search</i>
+                <i class="fas fa-search" id="searchButton"></i>
             </div>
+            <button class="logout-button" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
         </div>
 
         <!-- Alert Messages -->
         <?php if (!empty($alertMessage)): ?>
-        <div class="alert alert-<?php echo $alertType; ?> alert-dismissible fade show m-4" role="alert"
-            id="alertMessage">
-            <i class="material-icons me-2"><?php echo $alertType == 'success' ? 'check_circle' : 'error'; ?></i>
+        <div class="alert alert-<?php echo $alertType; ?> alert-dismissible fade show m-4" role="alert">
+            <i
+                class="fas <?php echo $alertType == 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'; ?> me-2"></i>
             <?php echo $alertMessage; ?>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
@@ -339,7 +323,7 @@ $conn->close();
         <!-- Search Results Section -->
         <div id="searchResults" class="table-responsive m-4">
             <h4>Search Results</h4>
-            <div id="searchMessage" class="search-message" style="display: none;"></div>
+            <div id="searchMessage" class="alert alert-warning" style="display: none;"></div>
             <table class="table table-hover" id="searchResultsTable">
                 <thead>
                     <tr>
@@ -352,9 +336,7 @@ $conn->close();
                         <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody id="searchResultsBody">
-                    <!-- Search results will be populated here -->
-                </tbody>
+                <tbody id="searchResultsBody"></tbody>
             </table>
             <button id="backToAllButton" class="btn btn-secondary">Back to All Requests</button>
         </div>
@@ -387,21 +369,21 @@ $conn->close();
                         <td><?php echo date('F j, Y, g:i a', strtotime($request['date_requested'])); ?></td>
                         <td><?php echo $request['delivery_method']; ?></td>
                         <td class="action-buttons">
-                            <form method="POST" style="display:inline;">
+                            <form method="POST" class="d-flex gap-1">
                                 <input type="hidden" name="request_id" value="<?php echo $request['request_ID']; ?>">
                                 <button type="submit" name="action" value="approve" class="btn btn-success btn-sm"
                                     <?php if ($request['status'] == 'Approved'): ?> disabled data-bs-toggle="tooltip"
                                     data-bs-placement="top" title="Request is already approved" <?php endif; ?>>
-                                    <i class="material-icons d-none">check</i>Approve
+                                    <i class="fas fa-check"></i> Approve
                                 </button>
                                 <button type="submit" name="action" value="reject" class="btn btn-danger btn-sm"
                                     <?php if ($request['status'] == 'Rejected'): ?> disabled data-bs-toggle="tooltip"
                                     data-bs-placement="top" title="Request is already rejected" <?php endif; ?>>
-                                    <i class="material-icons d-none">close</i>Reject
+                                    <i class="fas fa-times"></i> Reject
                                 </button>
-                                <a href="view_result.php?matric_number=<?php echo $request['matric_number']; ?>"
-                                    class="btn btn-info btn-sm text-bold">
-                                    <i class="material-icons d-none">visibility</i>View Result
+                                <a href="view_result.php?matric_number=<?php echo $request['matric_number']; ?>&email=<?php echo urlencode($request['email']); ?>"
+                                    class="btn btn-info btn-sm">
+                                    <i class="fas fa-eye"></i> View Result
                                 </a>
                             </form>
                         </td>
@@ -416,26 +398,6 @@ $conn->close();
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Custom JS -->
     <script>
-    // Initialize tooltips
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl);
-    });
-
-    // Toggle sidebar
-    const toggleSidebar = document.getElementById('toggleSidebar');
-    const sidebar = document.getElementById('sidebar');
-    const mainContent = document.getElementById('mainContent');
-
-    toggleSidebar.addEventListener('click', function() {
-        sidebar.classList.toggle('collapsed');
-        mainContent.classList.toggle('expanded');
-        toggleSidebar.classList.toggle('collapsed');
-        toggleSidebar.innerHTML = sidebar.classList.contains('collapsed') ?
-            '<i class="material-icons">chevron_right</i>' :
-            '<i class="material-icons">chevron_left</i>';
-    });
-
     // Search functionality
     const searchButton = document.getElementById('searchButton');
     const searchInput = document.getElementById('searchInput');
@@ -446,30 +408,24 @@ $conn->close();
     const allRequestsTable = document.getElementById('allRequestsTable');
     const backToAllButton = document.getElementById('backToAllButton');
 
-    // Function to perform search
     function performSearch() {
         const matricNumber = searchInput.value.trim();
-
         if (matricNumber === '') {
             alert('Please enter a matric number to search');
             return;
         }
 
-        // Show loading state
         searchResultsBody.innerHTML = '<tr><td colspan="7" class="text-center">Searching...</td></tr>';
         searchResults.style.display = 'block';
         allRequestsTable.style.display = 'none';
         searchMessage.style.display = 'none';
         searchResultsTable.style.display = 'table';
 
-        // Make AJAX request
         fetch(`?search_matric=${matricNumber}`)
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'success') {
-                    // Populate search results table
                     searchResultsBody.innerHTML = '';
-
                     data.data.forEach(request => {
                         const date = new Date(request.date_requested);
                         const formattedDate = date.toLocaleString('en-US', {
@@ -481,7 +437,6 @@ $conn->close();
                             hour12: true
                         });
 
-                        // Determine which buttons should be disabled based on status
                         const approveDisabled = request.status === 'Approved' ?
                             'disabled data-bs-toggle="tooltip" data-bs-placement="top" title="Request is already approved"' :
                             '';
@@ -491,47 +446,39 @@ $conn->close();
                             '';
 
                         searchResultsBody.innerHTML += `
-                            <tr>
-                                <td>${request.request_ID}</td>
-                                <td>${request.matric_number}</td>
-                                <td>${request.email}</td>
-                                <td>
-                                    <span class="status-badge ${request.status.toLowerCase()}">
-                                        ${request.status}
-                                    </span>
-                                </td>
-                                <td>${formattedDate}</td>
-                                <td>${request.delivery_method}</td>
-                                <td class="action-buttons">
-                                    <form method="POST" style="display:inline;">
-                                        <input type="hidden" name="request_id" value="${request.request_ID}">
-                                        <button type="submit" name="action" value="approve" class="btn btn-success btn-sm" ${approveDisabled}>
-                                            <i class="material-icons d-none">check</i>Approve
-                                        </button>
-                                        <button type="submit" name="action" value="reject" class="btn btn-danger btn-sm" ${rejectDisabled}>
-                                            <i class="material-icons d-none">close</i>Reject
-                                        </button>
-                                        <a href="view_result.php?matric_number=${request.matric_number}"
-                                            class="btn btn-info btn-sm text-bold">
-                                            <i class="material-icons d-none">visibility</i>View Result
-                                        </a>
-                                    </form>
-                                </td>
-                            </tr>
-                        `;
+                                <tr>
+                                    <td>${request.request_ID}</td>
+                                    <td>${request.matric_number}</td>
+                                    <td>${request.email}</td>
+                                    <td>
+                                        <span class="status-badge ${request.status.toLowerCase()}">
+                                            ${request.status}
+                                        </span>
+                                    </td>
+                                    <td>${formattedDate}</td>
+                                    <td>${request.delivery_method}</td>
+                                    <td class="action-buttons">
+                                        <form method="POST" style="display:inline;">
+                                            <input type="hidden" name="request_id" value="${request.request_ID}">
+                                            <button type="submit" name="action" value="approve" class="btn btn-success btn-sm" ${approveDisabled}>
+                                                <i class="fas fa-check"></i> Approve
+                                            </button>
+                                            <button type="submit" name="action" value="reject" class="btn btn-danger btn-sm" ${rejectDisabled}>
+                                                <i class="fas fa-times"></i> Reject
+                                            </button>
+                                            <a href="view_result.php?matric_number=${request.matric_number}"
+                                                class="btn btn-info btn-sm">
+                                                <i class="fas fa-eye"></i> View Result
+                                            </a>
+                                        </form>
+                                    </td>
+                                </tr>
+                            `;
                     });
 
                     searchResultsTable.style.display = 'table';
                     searchMessage.style.display = 'none';
-
-                    // Re-initialize tooltips for the newly added buttons
-                    var newTooltipTriggerList = [].slice.call(document.querySelectorAll(
-                        '[data-bs-toggle="tooltip"]'));
-                    var newTooltipList = newTooltipTriggerList.map(function(tooltipTriggerEl) {
-                        return new bootstrap.Tooltip(tooltipTriggerEl);
-                    });
                 } else {
-                    // Show not found message
                     searchMessage.innerHTML = data.message;
                     searchMessage.style.display = 'block';
                     searchResultsTable.style.display = 'none';
@@ -545,29 +492,20 @@ $conn->close();
             });
     }
 
-    // Search button click event
     searchButton.addEventListener('click', performSearch);
-
-    // Allow pressing Enter in search input
     searchInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            performSearch();
-        }
+        if (e.key === 'Enter') performSearch();
     });
 
-    // Back to all requests button
     backToAllButton.addEventListener('click', function() {
         searchResults.style.display = 'none';
         allRequestsTable.style.display = 'block';
         searchInput.value = '';
     });
 
-    // Hide alert message after 3 seconds
-    const alertMessage = document.getElementById('alertMessage');
-    if (alertMessage) {
-        setTimeout(() => {
-            alertMessage.style.display = 'none';
-        }, 3000);
+    // Logout function
+    function logout() {
+        window.location.href = "logout.php";
     }
     </script>
 </body>
