@@ -466,7 +466,7 @@ $conn->close();
                                             <button type="submit" name="action" value="reject" class="btn btn-danger btn-sm" ${rejectDisabled}>
                                                 <i class="fas fa-times"></i> Reject
                                             </button>
-                                            <a href="view_result.php?matric_number=${request.matric_number}"
+                                            <a href="transcript-view.php?matric_number=${request.matric_number}"
                                                 class="btn btn-info btn-sm">
                                                 <i class="fas fa-eye"></i> View Result
                                             </a>
