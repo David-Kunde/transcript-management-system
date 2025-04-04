@@ -140,7 +140,7 @@ $cgpa = ($tce > 0) ? $twgp / $tcr : 0; // Calculate CGPA
     .signature-section {
         display: flex;
         justify-content: space-between;
-        margin-top: 30px;
+        margin-top: 60px;
     }
 
     .signature-box {
@@ -156,10 +156,18 @@ $cgpa = ($tce > 0) ? $twgp / $tcr : 0; // Calculate CGPA
     }
 
     .signature-box .stamp {
-        height: 80px;
-        border: 1px dashed #0056b3;
-        /* Blue accent color */
+        height: 200px;
+        /* Reduced height to better fit the stamp */
         margin-top: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .stamp-img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
     }
 
     /* Print Styles */
@@ -371,12 +379,16 @@ if ($cgpa >= 4.5 && $cgpa <= 5.0) {
             <!-- Signature and Stamp Section -->
             <div class="signature-section">
                 <div class="signature-box">
-                    <p>Signature of Dean</p>
-                    <div class="stamp"></div>
+                    <p>Signature/Stamp of Dean and Date</p>
+                    <div class="stamp" style="height: 300px;">
+                        <img src="assets/images/dean-stamp.png" alt="Dean's Stamp" class="stamp-img">
+                    </div>
                 </div>
                 <div class="signature-box">
-                    <p>Signature of Academic Secretary</p>
-                    <div class="stamp"></div>
+                    <p>Signature/Stamp of Academic Secretary and Date</p>
+                    <div class="stamp" style="height: 200px;">
+                        <img src="assets/images/registrar-stamp.png" alt="Registrar's Stamp" class="stamp-img">
+                    </div>
                 </div>
             </div>
         </div>

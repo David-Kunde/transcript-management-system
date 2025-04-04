@@ -73,7 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         width: 100%;
         height: 100%;
         background: url('https://www.collegemagazine.com/wp-content/uploads/2022/02/alfons-morales-YLSwjSy7stw-unsplash-1024x601.jpg') no-repeat center center/cover;
-        filter: brightness(0.2);
+        filter: brightness(0.4);
         /* Darken the background image */
         z-index: -1;
     }

@@ -122,28 +122,27 @@ $conn->close();
         <!-- Transcript Section -->
         <section class="mb-4">
             <h2>Transcript</h2>
-            <div class="card shadow-sm">
-                <div class="card-body justify-content-between">
-                    <a href="transcript-request.php"><button class="btn btn-primary" id="request-transcript">
+            <div class="card shadow-sm py-3">
+                <div class="card-body justify-content-between py-2">
+                    <a href="transcript-request.php"><button class="btn btn-primary btn-sm  py-2"
+                            id="request-transcript">
                             Request Transcript
                         </button></a>
 
 
-                    <a href="transcript-view.php"><button class="btn btn-primary" id="request-transcript">
+                    <a href="transcript-view.php"><button class="btn btn-success py-2 btn-sm" id="request-transcript">
                             View Transcript
                         </button></a>
 
 
-                    <button class="btn btn-success" id="download-transcript" style="display;">
-                        Download Transcript
-                    </button>
+
 
                 </div>
             </div>
         </section>
 
         <!-- QR Code Section -->
-        <section>
+        <section class="d-none">
             <h2>Transcript Verification</h2>
             <div class="card shadow-sm">
                 <div class="card-body text-center">
