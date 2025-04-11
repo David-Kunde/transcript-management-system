@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 23, 2025 at 07:11 PM
+-- Generation Time: Apr 11, 2025 at 01:47 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -46,7 +46,7 @@ CREATE TABLE `administrators` (
 --
 
 INSERT INTO `administrators` (`Admin_ID`, `Email`, `Password`, `first_name`, `middle_name`, `last_name`, `Role`, `Permissions`, `Department`, `Last_Login`, `Is_Active`) VALUES
-(0, 'admin@gmail.com', '123', 'Ajayi', 'Crowther', 'samuel', NULL, NULL, NULL, '2025-03-23', 1);
+(0, 'admin@gmail.com', '123', 'Ajayi', 'Crowther', 'samuel', NULL, NULL, NULL, '2025-04-04', 1);
 
 -- --------------------------------------------------------
 
@@ -139,7 +139,7 @@ INSERT INTO `courses` (`courseID`, `courseCode`, `courseTitle`, `creditUnits`, `
 (91, 'MTH 418', 'Advanced Algebra', 3, '', 'elective', ''),
 (92, 'MTH 424', 'History of Mathematics', 3, '', 'elective', ''),
 (7, 'PHY 101', 'Mechanics and Waves', 2, 'core', 'core', 'core'),
-(19, 'PHY 102', 'Heat and Properties of Matter', 3, 'core', 'core', 'elective'),
+(19, 'PHY 102', 'Heat and Properties of Matter', 2, 'core', 'core', 'elective'),
 (24, 'PHY 103', 'Electricity and Magnetism', 3, 'core', 'core', 'core'),
 (8, 'PHY 105', 'Physics Laboratory I', 1, 'core', 'core', 'core'),
 (99, 'PHY 108', 'Physics Laboratory II', 1, 'core', NULL, NULL),
@@ -275,7 +275,7 @@ INSERT INTO `grades` (`sn`, `grade_ID`, `student_ID`, `course_code`, `credit_uni
 (258, 'BSU/SC/CMP/19/54286/MTH201/2022', 'BSU/SC/CMP/19/54286', 'MTH 201', 3, 55, 'C', 3, 'First', 2022),
 (268, 'BSU/SC/CMP/19/54286/MTH208/2022', 'BSU/SC/CMP/19/54286', 'MTH 208', 3, 50, 'C', 3, 'Second', 2022),
 (241, 'BSU/SC/CMP/19/54286/PHY101/2021', 'BSU/SC/CMP/19/54286', 'PHY 101', 2, 49, 'D', 2, 'First', 2021),
-(250, 'BSU/SC/CMP/19/54286/PHY102/2021', 'BSU/SC/CMP/19/54286', 'PHY 102', 3, 53, 'C', 3, 'Second', 2021),
+(250, 'BSU/SC/CMP/19/54286/PHY102/2021', 'BSU/SC/CMP/19/54286', 'PHY 102', 2, 53, 'C', 3, 'Second', 2021),
 (242, 'BSU/SC/CMP/19/54286/PHY103/2021', 'BSU/SC/CMP/19/54286', 'PHY 103', 3, 56, 'C', 3, 'First', 2021),
 (243, 'BSU/SC/CMP/19/54286/PHY105/2021', 'BSU/SC/CMP/19/54286', 'PHY 105', 1, 53, 'C', 3, 'First', 2021),
 (251, 'BSU/SC/CMP/19/54286/PHY108/2021', 'BSU/SC/CMP/19/54286', 'PHY 108', 1, 49, 'D', 2, 'Second', 2021),
@@ -757,6 +757,7 @@ INSERT INTO `students` (`Student_ID`, `Email`, `password`, `first_name`, `middle
 ('BSU/SC/CMP/19/54222', 'mariam@gmail.com', '123', 'Mariam', 'Kadoon', 'Ternenge', 'Mathematics and Computer Science', 'BSc. Computer Science', 2019, '08065365357', '71 off George Akume Way Makurdi, Benue state', NULL, '18/11/1996', 'Female', 'Science'),
 ('BSU/SC/CMP/19/54286', 'david@gmail.com', '123', 'David', 'Agerber', 'Gundusaa', 'Mathematics and Computer Science', 'BSc. Computer Science', 2019, '07034567890', '15 Makurdi Road, Benue State', '', '02/03/2002', 'Male', 'Science'),
 ('BSU/SC/CMP/19/54290', 'silas@gmail.com', '123', 'Silas', 'Zwungega', 'Akaartenger', 'Mathematics and Computer Science', 'BSc. Computer Science', 2019, '09123134511', '51 ade friday road Naka Makurdi', NULL, '21/04/2002', 'Male', 'Science'),
+('BSU/SC/CMP/19/54721', 'samson@gmail.com', '123', 'samson', 'sesugh', 'Terwamber', 'mathematics and computer science', 'BSc. Computer Science', NULL, '08054254276', '23 er street off otukpo road makurdi', NULL, '12/02/1998', '', 'Science'),
 ('BSU/SC/MTH/19/54289', 'emmanuel@gmail.com', '123', 'Emmanuel', 'Peter', 'Timilehin', 'Mathematics and Computer Science', 'BSc. Mathematics', 2019, '08165432198', '42 High Level Road, Makurdi', '', '', 'Male', 'Science'),
 ('BSU/SC/STA/19/51655', 'andrew@gmail.com', '123', 'Andrew', 'Tartaver', 'Abuwambe', 'Mathematics and Computer Science', 'BSc. Statistics', 2019, '09123716388', '23 Opoga Street High level Makurdi', NULL, '20/08/2001', 'Male', 'Science');
 
@@ -784,7 +785,9 @@ CREATE TABLE `transcript_requests` (
 --
 
 INSERT INTO `transcript_requests` (`request_ID`, `matric_number`, `email`, `status`, `date_requested`, `date_processed`, `admin_ID`, `delivery_method`, `notes`, `transcript_path`) VALUES
-(1, 'BSU/SC/MTH/19/54245', 'reded4@gmail.com', 'Pending', '2025-03-23', NULL, NULL, 'Dispatch', 'Request submitted successfully', '');
+(1, 'BSU/SC/MTH/19/54245', 'reded4@gmail.com', 'Approved', '2025-03-23', '2025-03-28', NULL, 'Dispatch', 'Request submitted successfully', ''),
+(2, 'BSU/SC/MTH/19/54289', 'emmanuel@gmail.com', 'Rejected', '2025-03-26', '2025-03-28', NULL, 'Email', 'Request submitted successfully', ''),
+(3, 'BSU/SC/CMP/19/54286', 'david@gmail.com', 'Rejected', '2025-04-04', '2025-04-04', NULL, 'Email', 'Request submitted successfully', '');
 
 --
 -- Indexes for dumped tables
@@ -841,7 +844,17 @@ ALTER TABLE `grades`
 -- AUTO_INCREMENT for table `transcript_requests`
 --
 ALTER TABLE `transcript_requests`
-  MODIFY `request_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `request_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `grades`
+--
+ALTER TABLE `grades`
+  ADD CONSTRAINT `grades_ibfk_1` FOREIGN KEY (`Student_ID`) REFERENCES `students` (`Student_ID`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
