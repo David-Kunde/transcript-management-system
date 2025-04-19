@@ -93,7 +93,7 @@ $conn->close();
 
         <!-- Profile Section -->
         <section class="mb-4">
-            <h2>Personal Information</h2>
+            
             <div class="card shadow-sm">
                 <div class="card-body">
                     <div class="row">
