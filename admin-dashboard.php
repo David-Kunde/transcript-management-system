@@ -113,6 +113,8 @@ $conn->close();
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <!-- Custom CSS -->
+    <link rel="stylesheet"  href="bootstrap.min.css">
+    
     <style>
     body {
         background-color: #f8f9fa;
@@ -258,6 +260,64 @@ $conn->close();
         background-color: #6c757d;
         border-color: #6c757d;
     }
+
+    .accordion-button.btn-info {
+    color: white;
+    padding: 5px 10px;
+    font-size: 14px;
+}
+
+.accordion-button:not(.collapsed) {
+    color: white;
+    background-color: #17a2b8;
+}
+
+.accordion-item {
+    border: none;
+    background: transparent;
+}
+
+.accordion-body {
+    padding: 10px;
+    background: white;
+    border-radius: 0 0 5px 5px;
+    border: 1px solid #dee2e6;
+    border-top: none;
+}
+/* Add this to your existing styles */
+.accordion-container {
+    width: 20vw;
+    min-width: 200px;
+}
+
+.accordion-button.btn-info {
+    color: white;
+    padding: 5px 10px;
+    font-size: 14px;
+    width: 100%;
+}
+
+.accordion-button:not(.collapsed) {
+    color: white;
+    background-color: #17a2b8;
+    width: 100%;
+}
+
+.accordion-item {
+    border: none;
+    background: transparent;
+    width: 100%;
+}
+
+.accordion-body {
+    padding: 10px;
+    background: white;
+    border-radius: 0 0 5px 5px;
+    border: 1px solid #dee2e6;
+    border-top: none;
+    width: 100%;
+}
+
     </style>
 </head>
 
@@ -332,7 +392,7 @@ $conn->close();
                         <th>Email</th>
                         <th>Status</th>
                         <th>Date Requested</th>
-                        <th>Delivery Method</th>
+                        <th class="d-none">Delivery Method</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -346,50 +406,221 @@ $conn->close();
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th>Request ID</th>
+                        <th>ID</th>
                         <th>Matric Number</th>
                         <th>Email</th>
                         <th>Status</th>
-                        <th>Date Requested</th>
-                        <th>Delivery Method</th>
-                        <th>Actions</th>
+                        <th>Request Date</th>
+                        <th>Delivery</th>
+                        <th class="align-center">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($requests as $request): ?>
-                    <tr>
-                        <td><?php echo $request['request_ID']; ?></td>
-                        <td><?php echo $request['matric_number']; ?></td>
-                        <td><?php echo $request['email']; ?></td>
-                        <td>
-                            <span class="status-badge <?php echo strtolower($request['status']); ?>">
-                                <?php echo $request['status']; ?>
-                            </span>
-                        </td>
-                        <td><?php echo date('F j, Y, g:i a', strtotime($request['date_requested'])); ?></td>
-                        <td><?php echo $request['delivery_method']; ?></td>
-                        <td class="action-buttons">
-                            <form method="POST" class="d-flex gap-1">
-                                <input type="hidden" name="request_id" value="<?php echo $request['request_ID']; ?>">
-                                <button type="submit" name="action" value="approve" class="btn btn-success btn-sm"
-                                    <?php if ($request['status'] == 'Approved'): ?> disabled data-bs-toggle="tooltip"
-                                    data-bs-placement="top" title="Request is already approved" <?php endif; ?>>
-                                    <i class="fas fa-check"></i> Approve
-                                </button>
-                                <button type="submit" name="action" value="reject" class="btn btn-danger btn-sm"
-                                    <?php if ($request['status'] == 'Rejected'): ?> disabled data-bs-toggle="tooltip"
-                                    data-bs-placement="top" title="Request is already rejected" <?php endif; ?>>
-                                    <i class="fas fa-times"></i> Reject
-                                </button>
-                                <a href="view_result.php?matric_number=<?php echo $request['matric_number']; ?>&email=<?php echo urlencode($request['email']); ?>"
-                                    class="btn btn-info btn-sm">
-                                    <i class="fas fa-eye"></i> View Result
-                                </a>
-                            </form>
-                        </td>
-                    </tr>
-                    <?php endforeach; ?>
-                </tbody>
+    <?php foreach ($requests as $request): ?>
+    <tr>
+        <td><?php echo $request['request_ID']; ?></td>
+        <td><?php echo $request['matric_number']; ?></td>
+        <td><?php echo $request['email']; ?></td>
+        <td>
+            <span class="status-badge <?php echo strtolower($request['status']); ?>">
+                <?php echo $request['status']; ?>
+            </span>
+        </td>
+        <td><?php echo date('F j, Y, g:i a', strtotime($request['date_requested'])); ?></td>
+        <td><?php echo $request['delivery_method']; ?></td>
+        <td class="action-buttons">
+            <form method="POST" class="d-flex gap-1">
+                <input type="hidden" name="request_id" value="<?php echo $request['request_ID']; ?>">
+                <button type="submit" name="action" value="approve" class="btn btn-success btn-sm"
+                    <?php if ($request['status'] == 'Approved'): ?> disabled data-bs-toggle="tooltip"
+                    data-bs-placement="top" title="Request is already approved" <?php endif; ?>>
+                    <i class="fas fa-check"></i> Approve
+                </button>
+                <button type="submit" name="action" value="reject" class="btn btn-danger btn-sm"
+                    <?php if ($request['status'] == 'Rejected'): ?> disabled data-bs-toggle="tooltip"
+                    data-bs-placement="top" title="Request is already rejected" <?php endif; ?>>
+                    <i class="fas fa-times"></i> Reject
+                </button>
+            </form>
+        </td>
+        <td class="w-25">
+            <div class="accordion " id="accordionResult_<?php echo $request['request_ID']; ?>">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed btn btn-info btn-sm " type="button" 
+                            data-bs-toggle="collapse" 
+                            data-bs-target="#collapse_<?php echo $request['request_ID']; ?>" 
+                            aria-expanded="false">
+                            <i class="fas fa-eye d-none"></i> Result Summary
+                        </button>
+                    </h2>
+                    <div id="collapse_<?php echo $request['request_ID']; ?>" 
+                        class="accordion-collapse collapse" 
+                        data-bs-parent="#accordionResult_<?php echo $request['request_ID']; ?>">
+                        <div class="accordion-body">
+                            
+
+
+                        <?php
+// Database connection details (XAMPP default)
+$servername = "localhost";
+$username = "root";       // Default XAMPP MySQL username
+$password = "";           // Default XAMPP MySQL password (empty)
+$dbname = "transcript_management";  
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+$matric_number = $request['matric_number'];
+$program = "No. Program";
+$tce = 0;
+$unfulfilled_gst_courses = 0;
+$unfulfilled_core_courses = 0;   
+$recommendation = "Reject"; // Default to Reject
+
+
+// 1. Get total credits earned
+$sql = "SELECT SUM(credit_units) AS total_credits_earned 
+        FROM grades 
+        WHERE student_ID = ? AND score > 39";
+
+$stmt = $conn->prepare($sql);
+$stmt->bind_param('s', $matric_number);
+$stmt->execute();
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
+$total_credits_earned = $row['total_credits_earned'] ?? 0;
+
+// 2. Get student's program
+$sql_program = "SELECT Program FROM students WHERE student_ID = ?";
+$stmt_program = $conn->prepare($sql_program);
+$stmt_program->bind_param('s', $matric_number);
+$stmt_program->execute();
+$result_program = $stmt_program->get_result();
+$row_program = $result_program->fetch_assoc();
+$program = $row_program['Program'] ?? 'Unknown Program';
+
+// 3. unfulfilled core courses
+$sql_ucc = "SELECT c.courseCode
+            FROM courses c
+            INNER JOIN grades g
+            ON c.courseCode = g.course_code
+            WHERE g.student_ID = ? AND c.course_type_for_computer = 'core' AND g.grade = 'F';";
+
+$stmt_ucc = $conn->prepare($sql_ucc);
+$stmt_ucc->bind_param('s', $matric_number);
+$stmt_ucc->execute();
+$result_ucc = $stmt_ucc->get_result();
+$ucc = $result_ucc->fetch_all(MYSQLI_ASSOC);
+
+// 4. unfulfilled GST courses
+$sql_ugst = "SELECT c.courseCode
+             FROM courses c
+             INNER JOIN grades g
+             ON c.courseCode = g.course_code
+             WHERE g.student_ID = ? AND c.course_type_for_computer = 'gst' AND g.grade = 'F';";
+                       
+$stmt_ugst = $conn->prepare($sql_ugst);
+$stmt_ugst->bind_param('s', $matric_number);
+$stmt_ugst->execute();
+$result_ugst = $stmt_ugst->get_result();
+$ugst = $result_ugst->fetch_all(MYSQLI_ASSOC);
+
+// Determine recommendation
+if ($total_credits_earned >= 104 && empty($ucc) && empty($ugst)) {
+    $recommendation = "Approve";
+} else {
+    $recommendation = "Reject";
+}
+
+$conn->close();
+?>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-hover">
+        <tbody>
+            <tr>
+                <th class="bg-light" style="width: 30%">Matric NO.</th>
+                <td><?php echo htmlspecialchars($matric_number) ?></td>
+            </tr>
+            <tr>
+                <th class="bg-light">Programme</th>
+                <td><?php echo htmlspecialchars($program) ?></td>
+            </tr>
+            <tr>
+                <th class="bg-light">TCE</th>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <span class="me-2"><?php echo $total_credits_earned ?>/144</span>
+                        <div class="progress flex-grow-1 d-none" style="height: 20px;">
+                            <div class="progress-bar bg-<?php echo ($total_credits_earned >= 144) ? 'success' : 'warning' ?>" 
+                                 role="progressbar" 
+                                 style="width: <?php echo min(100, ($total_credits_earned/144)*100) ?>%">
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            
+            <tr>
+                <th class="bg-light">Failed Core Courses</th>
+                <td>
+                    <?php if (!empty($ucc)): ?>
+                        <div class="d-flex flex-wrap gap-1">
+                            <?php foreach ($ucc as $course): ?>
+                                <span class="badge bg-danger">
+                                    <?php echo htmlspecialchars($course['courseCode']) ?>
+                                </span>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php else: ?>
+                        <span class="badge bg-success p-2">ALL PASSED</span>
+                    <?php endif; ?>
+                </td>
+            </tr>
+
+            <tr>
+                <th class="bg-light">Failed GST Courses</th>
+                <td>
+                    <?php if (!empty($ugst)): ?>
+                        <div class="d-flex flex-wrap gap-1">
+                            <?php foreach ($ugst as $course): ?>
+                                <span class="badge bg-danger">
+                                    <?php echo htmlspecialchars($course['courseCode']) ?>
+                                </span>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php else: ?>
+                        <span class="badge bg-success p-2">ALL PASSED</span>
+                    <?php endif; ?>
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr class="table-<?php echo ($recommendation == 'Approve') ? 'success' : 'danger' ?>">
+                <th colspan="2" class="text-center h6 py-2">
+                    RECOMMENDATION: <?php echo strtoupper($recommendation) ?>
+                </th>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+                       
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </td>
+    </tr>
+    <?php endforeach; ?>
+</tbody>
             </table>
         </div>
     </div>
@@ -445,35 +676,35 @@ $conn->close();
                             'disabled data-bs-toggle="tooltip" data-bs-placement="top" title="Request is already rejected"' :
                             '';
 
-                        searchResultsBody.innerHTML += `
-                                <tr>
-                                    <td>${request.request_ID}</td>
-                                    <td>${request.matric_number}</td>
-                                    <td>${request.email}</td>
-                                    <td>
-                                        <span class="status-badge ${request.status.toLowerCase()}">
-                                            ${request.status}
-                                        </span>
-                                    </td>
-                                    <td>${formattedDate}</td>
-                                    <td>${request.delivery_method}</td>
-                                    <td class="action-buttons">
-                                        <form method="POST" style="display:inline;">
-                                            <input type="hidden" name="request_id" value="${request.request_ID}">
-                                            <button type="submit" name="action" value="approve" class="btn btn-success btn-sm" ${approveDisabled}>
-                                                <i class="fas fa-check"></i> Approve
-                                            </button>
-                                            <button type="submit" name="action" value="reject" class="btn btn-danger btn-sm" ${rejectDisabled}>
-                                                <i class="fas fa-times"></i> Reject
-                                            </button>
-                                            <a href="view_result.php?matric_number=${request.matric_number}"
-                                                class="btn btn-info btn-sm">
-                                                <i class="fas fa-eye"></i> View Result
-                                            </a>
-                                        </form>
-                                    </td>
-                                </tr>
-                            `;
+                            searchResultsBody.innerHTML += `
+    <tr>
+        <!-- other table cells -->
+        <td>
+            <div class="accordion" id="accordionResult_${request.request_ID}">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed btn btn-info btn-sm" type="button" 
+                            data-bs-toggle="collapse" 
+                            data-bs-target="#collapse_${request.request_ID}" 
+                            aria-expanded="false">
+                            <i class="fas fa-eye"></i> View Result
+                        </button>
+                    </h2>
+                    <div id="collapse_${request.request_ID}" 
+                        class="accordion-collapse collapse" 
+                        data-bs-parent="#accordionResult_${request.request_ID}">
+                        <div class="accordion-body">
+                            <p><strong>Total Credits Earned:</strong> ${request.total_credits || 'N/A'}</p>
+                            <p><strong>Unfulfilled Core Courses:</strong> ${request.unfulfilled_core || 'None'}</p>
+                            <p><strong>Unfulfilled GST Courses:</strong> ${request.unfulfilled_gst || 'None'}</p>
+                            <p><strong>Recommendation:</strong> ${request.recommendation || 'N/A'}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </td>
+    </tr>
+`;
                     });
 
                     searchResultsTable.style.display = 'table';
